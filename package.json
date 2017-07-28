@@ -1,0 +1,14 @@
+{
+  "name": "hack-capital",
+  "version": "1.0.0",
+  "description": "A one-line summary reporting script for streams",
+  "main": "main.js",
+  "scripts": {
+    "test": "./node_modules/.bin/jasmine-node spec"
+  },
+  "author": "Nolan Tait",
+  "license": "ISC",
+  "dependencies": {
+    "jasmine-node": "^1.14.5"
+  }
+}
