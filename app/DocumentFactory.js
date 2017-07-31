@@ -3,7 +3,6 @@ const { StringDecoder } = require('string_decoder');
 const decoder = new StringDecoder('utf8');
 const util = require('util');
 
-
 //Document Factory takes in a document object to hold persistance
 //Document object must implement .addText({text, bytes}) method
 //
