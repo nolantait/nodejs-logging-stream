@@ -1,4 +1,0 @@
-
-describe("Features Spec", function() {
-
-});
