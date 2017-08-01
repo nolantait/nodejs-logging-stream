@@ -7,7 +7,7 @@ const util = require('util');
 //document.totalLines = total lines of document
 //document.lineGrowthRate = total lines per minute
 //
-function DocumentSummarizer(options) {
+function DocumentSummarizer(argv, options) {
   if (!(this instanceof DocumentSummarizer)) {
     return new DocumentSummarizer(options);
   }
@@ -15,27 +15,41 @@ function DocumentSummarizer(options) {
   if (!options) options = {}
   options.objectMode = true;
   Transform.call(this, options);
+  if ((argv === undefined) || (Object.keys(argv).length === 1)) {
+    this.argv = {
+      'b': true,
+      't': true,
+      'l': true,
+      'g': true
+    }
+  } else {
+    this.argv = argv;
+  };
 };
 util.inherits(DocumentSummarizer, Transform);
 
 DocumentSummarizer.prototype._transform = function(doc, encoding, next) {
+  const self = this;
+
+  messages = {
+    'b': 'Bytes: ' + doc.bytes,
+    't': 'Throughput: ' + doc.throughput + ' bytes/sec',
+    'l': 'Lines: ' + doc.totalLines,
+    'g': 'Growth Rate: ' + doc.lineGrowthRate + ' lines/minute'
+  };
+
+  let returned_messages = [];
+  for (var key in self.argv) {
+    returned_messages.push(messages[key]);
+  };
+
   summaryObject = {
     bytes: doc.bytes,
     throughput: doc.throughput,
     lines: doc.totalLines,
     growth: doc.lineGrowthRate,
     message: function() {
-      return(
-        '\n' + 
-        'Bytes: ' + this.bytes +
-        '\n' +
-        'Throughput: ' + this.throughput + ' bytes/sec' +
-        '\n' +
-        'Lines: ' + this.lines +
-        '\n' +
-        'Growth Rate: ' + this.growth + ' lines/minute' +
-        '\n'
-      );
+     return returned_messages.join('\n');
     }
   };
 
